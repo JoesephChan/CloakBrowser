@@ -16,12 +16,17 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Any, Literal, TypedDict
+from typing import TYPE_CHECKING, Any, Literal, TypedDict
 from urllib.parse import quote, unquote, urlparse, urlunparse
 
 from .config import DEFAULT_VIEWPORT, IGNORE_DEFAULT_ARGS, get_default_stealth_args
 from .download import ensure_binary
 from .human.config import HumanConfigOverrides, HumanPreset
+
+if TYPE_CHECKING:
+    from playwright.sync_api import Browser, BrowserContext
+    from playwright.async_api import Browser as AsyncBrowser
+    from playwright.async_api import BrowserContext as AsyncBrowserContext
 
 logger = logging.getLogger("cloakbrowser")
 
@@ -66,7 +71,7 @@ def launch(
     human_config: HumanConfigOverrides | None = None,
     extension_paths: list[str] | None = None,
     **kwargs: Any,
-) -> Any:
+) -> Browser:
     """Launch stealth Chromium browser. Returns a Playwright Browser object.
 
     Args:
@@ -164,7 +169,7 @@ async def launch_async(  # noqa: C901
     human_config: HumanConfigOverrides | None = None,
     extension_paths: list[str] | None = None,
     **kwargs: Any,
-) -> Any:
+) -> AsyncBrowser:
     """Async version of launch(). Returns a Playwright Browser object.
 
     Args:
@@ -260,7 +265,7 @@ def launch_persistent_context(
     human_config: HumanConfigOverrides | None = None,
     extension_paths: list[str] | None = None,
     **kwargs: Any,
-) -> Any:
+) -> BrowserContext:
     """Launch stealth browser with a persistent profile and return a BrowserContext.
 
     This persists cookies, localStorage, cache, and other browser state across
@@ -386,7 +391,7 @@ async def launch_persistent_context_async(
     human_config: HumanConfigOverrides | None = None,
     extension_paths: list[str] | None = None,
     **kwargs: Any,
-) -> Any:
+) -> AsyncBrowserContext:
     """Async version of launch_persistent_context().
 
     Launch stealth browser with a persistent profile and return a BrowserContext.
@@ -513,7 +518,7 @@ def launch_context(
     human_config: HumanConfigOverrides | None = None,
     extension_paths: list[str] | None = None,
     **kwargs: Any,
-) -> Any:
+) -> BrowserContext:
     """Launch stealth browser and return a BrowserContext with common options pre-set.
 
     Convenience function that creates a browser + context in one call.
@@ -614,7 +619,7 @@ async def launch_context_async(
     human_config: HumanConfigOverrides | None = None,
     extension_paths: list[str] | None = None,
     **kwargs: Any,
-) -> Any:
+) -> AsyncBrowserContext:
     """Async version of launch_context().
 
     Launch stealth browser and return a BrowserContext with common options pre-set.
